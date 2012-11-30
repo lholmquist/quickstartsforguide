@@ -16,23 +16,23 @@
         <!-- Explicitly declaring the source encoding eliminates the following message: -->
         <!-- [WARNING] Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent! -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        
+
         <!-- You can reference property in pom.xml or filtered resources (must enable third-party plugin if using Maven < 2.1) -->
 
         <!-- JBoss dependency versions -->
         <jboss.as.plugin.version>7.1.1.Final</jboss.as.plugin.version>
         <!-- Define the version of the JBoss BOMs we want to import. The
             JBoss BOMs specify tested stacks. -->
-        <jboss.bom.version>1.0.1.Final</jboss.bom.version>
+        <jboss.bom.version>1.0.2.Final</jboss.bom.version>
 
         <!--<javaee6.web.spec.version>3.0.0.Final</javaee6.web.spec.version>-->
         <!-- JBoss EAP Certified Versions -->
         <!-- <javaee6.web.spec.version>3.0.0.Beta1-redhat-1</javaee6.web.spec.version> -->
         <!-- <version.org.hibernate.validator>4.2.0.Final-redhat-1</version.org.hibernate.validator> -->
         <version.org.jboss.as.arquillian.ci>7.1.1.Final</version.org.jboss.as.arquillian.ci>
-        
-        <wro4j.version>1.4.4</wro4j.version>
 
+        <wro4j.version>1.4.4</wro4j.version>
+        <browserCapabilities>firefox</browserCapabilities>
     </properties>
 
     <licenses>
@@ -69,7 +69,7 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-    
+
     <dependencies>
         <!-- First declare the APIs we depend on and need for compilation. All of them are provided by JBoss -->
 
@@ -160,6 +160,20 @@
             <scope>test</scope>
         </dependency>
 
+        <dependency>
+            <groupId>org.jboss.arquillian.extension</groupId>
+            <artifactId>arquillian-drone-webdriver-depchain</artifactId>
+            <type>pom</type>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.arquillian.graphene</groupId>
+            <artifactId>arquillian-graphene</artifactId>
+            <type>pom</type>
+            <version>2.0.0.Alpha2</version>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -191,7 +205,7 @@
                 <artifactId>jboss-as-maven-plugin</artifactId>
                 <version>7.1.1.Final</version>
             </plugin>
-            
+
             <plugin>
                 <groupId>com.mycila.maven-license-plugin</groupId>
                 <artifactId>maven-license-plugin</artifactId>
@@ -203,7 +217,7 @@
                     </mapping>
                     <strictCheck>true</strictCheck>
                     <includes>
-                    <include>src/**</include>
+                        <include>src/**</include>
                     </includes>
                     <excludes>
                         <exclude>src/main/webapp/js/libs/**</exclude>
@@ -216,7 +230,7 @@
             </plugin>
         </plugins>
     </build>
-    
+
     <profiles>
         <profile>
             <!-- The default profile skips all tests, though you can tune it to run just unit tests based on a custom pattern -->
@@ -323,7 +337,23 @@
                             <skip>true</skip>
                         </configuration>
                     </plugin>
+                    <plugin>
+                        <artifactId>maven-resources-plugin</artifactId>
+                        <version>2.5</version>
+                    </plugin>
                 </plugins>
+                <testResources>
+                    <testResource>
+                        <directory>src/test/resources</directory>
+                        <filtering>true</filtering>
+                        <includes><include>**/arquillian.xml</include></includes>
+                    </testResource>
+                    <testResource>
+                        <directory>src/test/resources</directory>
+                        <filtering>false</filtering>
+                        <excludes><exclude>**/arquillian.xml</exclude></excludes>
+                    </testResource>
+                </testResources>
             </build>
         </profile>
         <profile>
@@ -349,6 +379,19 @@
                 <dependency>
                     <groupId>org.jboss.as</groupId>
                     <artifactId>jboss-as-arquillian-container-remote</artifactId>
+                    <scope>test</scope>
+                </dependency>
+            </dependencies>
+        </profile>
+
+        <profile>
+            <id>arq-drone-ios</id>
+            <dependencies>
+                <dependency>
+                    <groupId>org.jboss.arquillian.extension</groupId>
+                    <artifactId>arquillian-ios-depchain</artifactId>
+                    <version>1.0.0-SNAPSHOT</version>
+                    <type>pom</type>
                     <scope>test</scope>
                 </dependency>
             </dependencies>
@@ -409,5 +452,5 @@
             </build>
         </profile>
     </profiles>
-    
+
 </project>

@@ -45,4 +45,18 @@
         </configuration>
     </container>
 
+    <extension qualifier="webdriver">
+        <property name="browserCapabilities">${browserCapabilities}</property>
+        <!-- Remote location aka, where it's running on your device-->
+        <!--<property name="remoteAddress">http://10.9.10.66:3001/wd/hub/</property>-->
+    </extension>
+
+    <extension qualifier="ios-drone">
+        <!--
+            this is optional - the extension can do svn checkout automatically,
+            but it can take a long time
+        -->
+       <property name="localSeleniumCopy">/Users/lholmquist/develop/projects/sel_trunk</property>
+    </extension>
+
 </arquillian>
